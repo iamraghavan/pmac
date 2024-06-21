@@ -1,0 +1,47 @@
+<div id="sidebar" class="sidebar-desktop active">
+    <div class="sidebar-wrapper active ps ps--active-y">
+        <div class="sidebar-header position-relative">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="logo">
+                    <a href="{% url 'dashboard_secure' request.session.unique_id %}"><img
+                            src="https://raw.githubusercontent.com/iamraghavan/iamraghavan/main/logo.png" alt="Logo"
+                            srcset=""></a>
+                </div>
+
+                <div class="sidebar-toggler  x">
+                    <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <!-- sidebar.html -->
+
+            <!-- sidebar.html -->
+
+            <ul class="menu">
+                <li class="sidebar-item">
+                    <a href="{% url 'dashboard_secure' request.session.unique_id %}" class="sidebar-link">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="{% url 'profile_secure' request.session.unique_id %}" class="sidebar-link">
+                        <i class="bi bi-person-badge-fill"></i>
+                        <span>Marital Status</span>
+                    </a>
+                </li>
+            </ul>
+
+
+
+        </div>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 0px; height: 957px; right: 0px;">
+            <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 504px;"></div>
+        </div>
+    </div>
+</div>
