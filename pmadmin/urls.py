@@ -14,8 +14,7 @@ urlpatterns = [
     path('o/secure/update-payment-status/', views.update_payment_status, name='update_payment_status'),
 
     path('o/secure/<str:unique_id>/admin-control/profile-view/', views.profile_view, name='profile_view_secure'),
-    
+    path('o/secure/<str:unique_id>/admin-control/profile-view/edit-profile/<str:user_pmid>/', views.edit_profile, name='edit_profile'),
 ]
-
 
 

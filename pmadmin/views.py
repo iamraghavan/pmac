@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
-import pyrebase
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
+from django.template.loader import get_template
+import pdfkit
 from .models import UserPayments, Users, Profiles
 from django_user_agents.utils import get_user_agent
 import uuid
-from django.db.models import Q,F
+from django.db.models import Q
+import pyrebase
+
+from .forms import ProfileForm
+
 
 
 config = {
@@ -190,6 +195,33 @@ def update_payment_status(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 
 
+def edit_profile(request, user_pmid):
+    profile = get_object_or_404(Profiles, user_pmid=user_pmid)
+    
+    if request.method == 'POST':
+        profile.age = request.POST.get('age')
+        profile.dob = request.POST.get('dob')
+        profile.religion = request.POST.get('religion')
+        profile.mother_tongue = request.POST.get('mother_tongue')
+        profile.height = request.POST.get('height')
+        profile.marital_status = request.POST.get('marital_status')
+        profile.disability = request.POST.get('disability')
+        profile.family_status = request.POST.get('family_status')
+        profile.family_type = request.POST.get('family_type')
+        profile.family_value = request.POST.get('family_value')
+        profile.education = request.POST.get('education')
+        profile.employed_in = request.POST.get('employed_in')
+        profile.occupation = request.POST.get('occupation')
+        profile.annual_income = request.POST.get('annual_income')
+        profile.work_location = request.POST.get('work_location')
+        profile.residing_state = request.POST.get('residing_state')
+        profile.my_bio = request.POST.get('my_bio')
+
+        profile.save()
+        
+        return JsonResponse({'status': 'success'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 
 
 
@@ -231,6 +263,9 @@ def profile_view(request, unique_id):
     return render(request, 'profile-view.html', context)
 
 
+
+
+  
 
 
 # Logout function 

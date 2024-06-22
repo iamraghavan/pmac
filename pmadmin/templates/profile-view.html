@@ -44,24 +44,13 @@
 
                 {% if user %}
                 <div class="row">
-
-
                     <div class="col-12 col-md-6">
                         <h4>Profile Details</h4>
-
-                        <!-- <div class="mx-4 my-3 text-center">
+                        <div class="mx-4 mb-3">
                             <img src="https://paraiyarmatching.bumblebeesprojects.in{{ profile.profile_image }}"
-                                alt="{{ profile.profile_image }}" style="
-                                border-radius: 0% !important;
-                                width: 30%;
-                                height: 10%;
-                            " class="img-fluid rounded mb-3">
-                        </div> -->
-
+                                alt="Profile Image" class="img-fluid rounded mb-3">
+                        </div>
                         <p><strong>Age:</strong> {{ profile.age }}</p>
-
-                        <p><strong>img url:</strong> {{ profile.profile_image }}</p>
-
                         <p><strong>Date of Birth:</strong> {{ profile.dob }}</p>
                         <p><strong>Religion:</strong> {{ profile.religion }}</p>
                         <p><strong>Mother Tongue:</strong> {{ profile.mother_tongue }}</p>
@@ -91,6 +80,19 @@
                         <p><strong>PMID:</strong> {{ user.pmid }}</p>
                         <p><strong>Gender:</strong> {{ user.gender }}</p>
                         <p><strong>Created At:</strong> {{ user.created_at }}</p>
+                        <div class="mt-4">
+                            <!-- Add buttons to export PDF and edit profile -->
+                            <!-- <div>
+                                <div>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#updateModal" onclick="openUpdateModal('{{ user.pmid }}')">Update
+                                        Profile
+                                    </button>
+
+                                </div>
+                            </div> -->
+
+                        </div>
                     </div>
                 </div>
 
@@ -126,5 +128,11 @@
 
     {% include 'components/footer.html' %}
 </div>
+
+
+
+
+
+
 
 {% endblock %}
