@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
 from django.template.loader import get_template
-import pdfkit
+# import pdfkit
 from .models import UserPayments, Users, Profiles
 from django_user_agents.utils import get_user_agent
 import uuid
