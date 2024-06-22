@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-wwmplt-*f8f6w4q@(*8#fo9(b(uod9d5jov=da!0c=)c9p1l^^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['pmac.onrender.com']
+ALLOWED_HOSTS = ['pmac.onrender.com','127.0.0.1']
 
 # AUTH_USER_MODEL = 'pmadmin.AdminUsers'
 
@@ -135,11 +135,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_URL = True
-
-  
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 
 
 # Default primary key field type
