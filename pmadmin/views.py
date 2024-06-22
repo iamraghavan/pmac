@@ -141,6 +141,9 @@ def update_marital_status(request):
 
 # Logout function 
 
+
+
+
 def logout(request, unique_id):
     if not request.session.get('uid') or request.session.get('unique_id') != unique_id:
         return HttpResponseForbidden("403 Forbidden: Unauthorized access.")
