@@ -45,6 +45,7 @@
                             <th>PMID</th>
                             <th>Payment</th>
                             <th>Package Details</th>
+                            <th>Package Expired</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -72,6 +73,12 @@
                                 {% endif %}
                                 {% endfor %}
                             </td>
+                            <td>
+                                {% for payment in user_payments %}
+                                {% if payment.user_pmid == user.pmid %}
+                                {{ payment.plan_expired_date }}
+                                {% endif %}
+                                {% endfor %}
                             <td>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#updateModal"
@@ -150,7 +157,7 @@
         const form = document.getElementById('updateForm');
         const formData = new FormData(form);
 
-        fetch("{% url 'update_payment_status' %}", {
+        fetch("{% url 'edit_profile' %}", {
                 method: 'POST',
                 body: formData,
                 headers: {

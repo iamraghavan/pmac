@@ -7,8 +7,9 @@ from django_user_agents.utils import get_user_agent
 import uuid
 from django.db.models import Q
 import pyrebase
+from datetime import datetime, timedelta
+from django.utils import timezone
 
-from .forms import ProfileForm
 
 
 
@@ -183,45 +184,29 @@ def update_payment_status(request):
         paid_status = int(request.POST.get('paid_status', 0))  # Convert to integer
         package_details = request.POST.get('package_details', '')
 
+        # Calculate plan_expired_date based on package_details
+        if package_details == '3 Months':
+            plan_expired_date = timezone.now() + timedelta(days=90)
+        elif package_details == '6 Months':
+            plan_expired_date = timezone.now() + timedelta(days=180)
+        elif package_details == '9 Months':
+            plan_expired_date = timezone.now() + timedelta(days=270)
+        elif package_details == '12 Months':
+            plan_expired_date = timezone.now() + timedelta(days=365)
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid package details'})
+
         try:
             user_payment = UserPayments.objects.get(user_pmid=user_pmid)
             user_payment.paid_status = bool(paid_status)
             user_payment.package_details = package_details
+            user_payment.plan_expired_date = plan_expired_date
             user_payment.save()
             return JsonResponse({'status': 'success'})
         except UserPayments.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'User payment not found'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'})
-
-
-def edit_profile(request, user_pmid):
-    profile = get_object_or_404(Profiles, user_pmid=user_pmid)
-    
-    if request.method == 'POST':
-        profile.age = request.POST.get('age')
-        profile.dob = request.POST.get('dob')
-        profile.religion = request.POST.get('religion')
-        profile.mother_tongue = request.POST.get('mother_tongue')
-        profile.height = request.POST.get('height')
-        profile.marital_status = request.POST.get('marital_status')
-        profile.disability = request.POST.get('disability')
-        profile.family_status = request.POST.get('family_status')
-        profile.family_type = request.POST.get('family_type')
-        profile.family_value = request.POST.get('family_value')
-        profile.education = request.POST.get('education')
-        profile.employed_in = request.POST.get('employed_in')
-        profile.occupation = request.POST.get('occupation')
-        profile.annual_income = request.POST.get('annual_income')
-        profile.work_location = request.POST.get('work_location')
-        profile.residing_state = request.POST.get('residing_state')
-        profile.my_bio = request.POST.get('my_bio')
-
-        profile.save()
-        
-        return JsonResponse({'status': 'success'})
-    else:
-        return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 
 
 
@@ -265,7 +250,35 @@ def profile_view(request, unique_id):
 
 
 
-  
+def edit_profile(request, user_pmid):
+    if request.method == 'POST' and request.is_ajax():
+        profile = get_object_or_404(Profiles, user_pmid=user_pmid)
+
+        # Update profile fields based on form data
+        profile.age = request.POST.get('age')
+        profile.dob = request.POST.get('dob')
+        profile.religion = request.POST.get('religion')
+        profile.mother_tongue = request.POST.get('mother_tongue')
+        profile.height = request.POST.get('height')
+        profile.marital_status = request.POST.get('marital_status')
+        profile.disability = request.POST.get('disability')
+        profile.family_status = request.POST.get('family_status')
+        profile.family_type = request.POST.get('family_type')
+        profile.family_value = request.POST.get('family_value')
+        profile.education = request.POST.get('education')
+        profile.employed_in = request.POST.get('employed_in')
+        profile.occupation = request.POST.get('occupation')
+        profile.annual_income = request.POST.get('annual_income')
+        profile.work_location = request.POST.get('work_location')
+        profile.residing_state = request.POST.get('residing_state')
+        profile.my_bio = request.POST.get('my_bio')
+
+        # Save updated profile
+        profile.save()
+
+        return JsonResponse({'status': 'success'})
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 
 
 # Logout function 

@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
 
-
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="bingbot" content="noindex, nofollow">
 
     <link rel="stylesheet" href="{% static 'compiled/css/application-email.css' %}" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'compiled/css/app.css' %}" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'compiled/css/app-dark.css' %}" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'compiled/css/auth.css' %}" crossorigin="anonymous">
     <script src="{% static 'static/js/initTheme.js' %}"></script>
     <link rel="stylesheet" href="{% static 'compiled/css/iconly.css' %}">
@@ -50,7 +51,7 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script> -->
 
 
-    <script>
+    <!-- <script>
         document.querySelector('.sidebar-toggle').addEventListener('click', () => {
             document.querySelector('.email-app-sidebar').classList.toggle('show')
         })
@@ -63,7 +64,7 @@
         document.querySelector('.email-compose-new-close-btn').addEventListener('click', () => {
             document.querySelector('.compose-new-mail-sidebar').classList.remove('show')
         })
-    </script>
+    </script> -->
 </body>
 
 </html>
