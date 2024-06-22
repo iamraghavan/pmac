@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+{% include 'components/navbar.html' %}
+
+
+
+<div id="main">
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>User Payments</h3>
+                    <p class="text-subtitle text-muted">{{ os }} / {{ browser_family }} / {{ browser_version }}</p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a
+                                    href="{% url 'dashboard_secure' request.session.unique_id %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">User Payments</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped" id="table1">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>PMID</th>
+                            <th>Payment</th>
+                            <th>Package Details</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users_profiles %}
+                        <tr>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td>{{ user.pmid }}</td>
+                            <td>
+                                {% for payment in user_payments %}
+                                {% if payment.user_pmid == user.pmid %}
+                                <span
+                                    class="badge {{ payment.paid_status|yesno:'bg-success,bg-danger' }}">
+                                    {{ payment.paid_status|yesno:'Paid,Not Paid' }}
+                                </span>
+                                {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for payment in user_payments %}
+                                {% if payment.user_pmid == user.pmid %}
+                                {{ payment.package_details }}
+                                {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#updateModal"
+                                    onclick="openUpdateModal('{{ user.pmid }}', '{{ payment.paid_status }}', '{{ payment.package_details }}')">Update
+                                    Payment Status</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Update Modal -->
+        <div class="modal fade text-left" id="updateModal" tabindex="-1" role="dialog"
+            aria-labelledby="updateModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateModalLabel">Update Payment Status</h5>
+                        <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+                            <i data-feather="x"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="updateForm">
+                            <input type="hidden" name="user_pmid" id="user_pmid">
+                            <div class="form-group">
+                                <label for="paid_status">Payment Status</label>
+                                <select class="form-control" name="paid_status" id="paid_status">
+                                    <option value="1">Paid</option>
+                                    <option value="0">Not Paid</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="package_details">Package Details</label>
+                                <select class="form-control" name="package_details" id="package_details">
+                                    <option value="3 Months">3 Months</option>
+                                    <option value="6 Months">6 Months</option>
+                                    <option value="9 Months">9 Months</option>
+                                    <option value="12 Months">12 Months</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal">
+                            <span class="d-none d-sm-block">Close</span>
+                        </button>
+                        <button type="button" class="btn btn-primary ms-1" onclick="updatePaymentStatus()">
+                            <span class="d-none d-sm-block">Save changes</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'components/footer.html' %}
+</div>
+
+<script>
+    // Initialize the datatable
+    document.addEventListener('DOMContentLoaded', function () {
+        const table = document.querySelector("#table1");
+        const dataTable = new simpleDatatables.DataTable(table);
+    });
+
+    function openUpdateModal(userPmid, paidStatus, packageDetails) {
+        document.getElementById('user_pmid').value = userPmid;
+        document.getElementById('paid_status').value = paidStatus ? 1 : 0;
+        document.getElementById('package_details').value = packageDetails;
+    }
+
+    function updatePaymentStatus() {
+        const form = document.getElementById('updateForm');
+        const formData = new FormData(form);
+
+        fetch("{% url 'update_payment_status' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Payment status updated successfully!');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+    }
+</script>
+
+{% endblock %}

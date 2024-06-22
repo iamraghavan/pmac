@@ -32,6 +32,22 @@
                         <span>Marital Status</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item">
+                    <a href="{% url 'payment_secure' request.session.unique_id %}" class="sidebar-link">
+                        <i class="bi bi bi-cash"></i>
+                        <span>Payment Status</span>
+                    </a>
+                </li>
+
+
+                <li class="sidebar-item">
+                    <a href="{% url 'profile_view_secure' request.session.unique_id %}" class="sidebar-link">
+                        <i class="bi bi-person"></i>
+                        <span>Profile View</span>
+                    </a>
+                </li>
+
             </ul>
 
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 import pyrebase
 from django.http import HttpResponseForbidden, JsonResponse
 from .models import UserPayments, Users, Profiles
@@ -123,6 +123,8 @@ def profile(request, unique_id):
 
 
 
+
+
 def update_marital_status(request):
     if request.method == 'POST':
         user_pmid = request.POST.get('user_pmid')
@@ -139,10 +141,99 @@ def update_marital_status(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request'})
 
 
+def payment(request, unique_id):
+    if not request.session.get('uid') or request.session.get('unique_id') != unique_id:
+        return HttpResponseForbidden("403 Forbidden: Unauthorized access.")
+    
+    user_agent = get_user_agent(request)
+    os = user_agent.os.family
+
+    search_query = request.GET.get('search', '')
+    
+    # Fetching user profiles and their related payments
+    users_profiles = Users.objects.filter(
+        Q(pmid__icontains=search_query) |
+        Q(email__icontains=search_query) |
+        Q(phone__icontains=search_query)
+    )
+
+    user_payments = UserPayments.objects.filter(user_pmid__in=users_profiles.values('pmid'))
+
+    context = {
+        'title': 'Payment - Matrimony Website Application - Bumble Bees IT Solutions',
+        'os': os,
+        'browser_family': user_agent.browser.family,
+        'browser_version': user_agent.browser.version_string,
+        'users_profiles': users_profiles,
+        'user_payments': user_payments,
+        'search_query': search_query
+    }
+    
+    return render(request, 'payment.html', context)
+
+# @csrf_exempt
+def update_payment_status(request):
+    if request.method == 'POST':
+        user_pmid = request.POST.get('user_pmid')
+        paid_status = int(request.POST.get('paid_status', 0))  # Convert to integer
+        package_details = request.POST.get('package_details', '')
+
+        try:
+            user_payment = UserPayments.objects.get(user_pmid=user_pmid)
+            user_payment.paid_status = bool(paid_status)
+            user_payment.package_details = package_details
+            user_payment.save()
+            return JsonResponse({'status': 'success'})
+        except UserPayments.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User payment not found'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'})
+
+
+
+
+
+def profile_view(request, unique_id):
+    if not request.session.get('uid') or request.session.get('unique_id') != unique_id:
+        return HttpResponseForbidden("403 Forbidden: Unauthorized access.")
+    
+    user_agent = get_user_agent(request)
+    os = user_agent.os.family
+
+    search_query = request.GET.get('search', '')
+    
+    user = None
+    profile = None
+    user_payment = None
+    
+    if search_query:
+        user = Users.objects.filter(
+            Q(pmid__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(phone__icontains=search_query)
+        ).first()
+        
+        if user:
+            profile = get_object_or_404(Profiles, user_pmid=user.pmid)
+            user_payment = UserPayments.objects.filter(user_pmid=user.pmid).first()
+    
+    context = {
+        'title': 'Profile View - Matrimony Website Application - Bumble Bees IT Solutions',
+        'os': os,
+        'browser_family': user_agent.browser.family,
+        'browser_version': user_agent.browser.version_string,
+        'user': user,
+        'profile': profile,
+        'user_payment': user_payment,
+        'search_query': search_query,
+    }
+    
+    return render(request, 'profile-view.html', context)
+
+
+
+
 # Logout function 
-
-
-
 
 def logout(request, unique_id):
     if not request.session.get('uid') or request.session.get('unique_id') != unique_id:
