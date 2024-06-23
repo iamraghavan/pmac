@@ -157,7 +157,7 @@
         const form = document.getElementById('updateForm');
         const formData = new FormData(form);
 
-        fetch("{% url 'edit_profile' %}", {
+        fetch("{% url 'update_payment_status' %}", {
                 method: 'POST',
                 body: formData,
                 headers: {

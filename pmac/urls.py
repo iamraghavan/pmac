@@ -23,6 +23,6 @@ urlpatterns = [
     path('o/secure/<str:unique_id>/admin-control/profile/',include('pmadmin.urls')),
     path('o/secure/<str:unique_id>/admin-control/payment-status/',include('pmadmin.urls')),
     path('o/secure/<str:unique_id>/admin-control/profile-view/',include('pmadmin.urls')),
-    path('o/secure/<str:unique_id>/admin-control/profile-view/', include('pmadmin.urls')),
-    path('edit-profile/<str:user_pmid>/', include('pmadmin.urls')),
+
+    
 ]
