@@ -52,7 +52,7 @@ PyScreeze==0.1.30
 PySocks==1.7.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
-python-jwt==2.0.1
+python-jwt==3.3.4
 pytweening==1.2.0
 pytz==2024.1
 pywhatkit==5.4
