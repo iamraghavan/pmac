@@ -93,10 +93,10 @@ WSGI_APPLICATION = 'pmac.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u427691722_pmat',
-        'USER': 'u427691722_adpmat',
-        'PASSWORD': '232003@Anbu',
-        'HOST': '195.179.239.102',
+        'NAME': 'paraiyar_website',
+        'USER': 'paraiyar_paraiyar',
+        'PASSWORD': 'Ph1+46JXz2nw;W',
+        'HOST': '51.79.176.220',
         'PORT': '3306',
     }
 }
