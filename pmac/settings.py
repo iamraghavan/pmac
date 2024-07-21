@@ -96,7 +96,7 @@ DATABASES = {
         'NAME': 'paraiyar_website',
         'USER': 'paraiyar_paraiyar',
         'PASSWORD': 'Ph1+46JXz2nw;W',
-        'HOST': '51.79.176.220',
+        'HOST': '51.79.193.101',
         'PORT': '3306',
     }
 }
