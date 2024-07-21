@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-wwmplt-*f8f6w4q@(*8#fo9(b(uod9d5jov=da!0c=)c9p1l^^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1','pmac.onrender.com', '']
+ALLOWED_HOSTS = ['127.0.0.1','pmac.onrender.com', 'localhost']
 
 # AUTH_USER_MODEL = 'pmadmin.AdminUsers'
 
